@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Safety Induction Tracker - Certificates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5aa0;
+            --primary-light: #4a76c9;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+        
+        body {
+            background: linear-gradient(to right, #f0f4ff, #ffffff);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient);
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            z-index: 1;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+        
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 30px;
+            z-index: 1;
+        }
+        
+        .user-profile img {
+            width: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Main Content */
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .welcome-section h2 {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-section p {
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+        
+        /* Page Navigation */
+        .page-nav {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .page-nav-item {
+            padding: 12px 25px;
+            margin: 0 5px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .page-nav-item:hover {
+            color: var(--primary);
+            background: rgba(44, 90, 160, 0.05);
+        }
+        
+        .page-nav-item.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Progress */
+        .progress-container {
+            margin-top: 10px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background: #e9ecef;
+        }
+        
+        .progress-bar {
+            background: var(--gradient);
+            border-radius: 10px;
+        }
+        
+        /* Locked State */
+        .locked-state {
+            text-align: center;
+            padding: 60px 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+        
+        .locked-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .locked-state h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .locked-state p {
+            color: var(--secondary);
+            max-width: 500px;
+            margin: 0 auto 25px;
+        }
+        
+        .btn-continue {
+            background: var(--gradient);
+            color: #fff;
+            border-radius: 30px;
+            padding: 10px 25px;
+            border: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(44, 90, 160, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-continue:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(44, 90, 160, 0.4);
+            color: #fff;
+        }
+        
+        /* Certificate */
+        .certificate-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .certificate-border {
+            border: 20px solid #2c5aa0;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .certificate-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .university-logo {
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .certificate-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c5aa0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .certificate-subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .certificate-body {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .award-text {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .student-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c5aa0;
+            margin: 30px 0;
+            padding: 10px;
+            border-bottom: 2px solid #2c5aa0;
+            display: inline-block;
+        }
+        
+        .course-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin: 30px 0 15px;
+        }
+        
+        .completion-date {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            color: #555;
+        }
+        
+        .certificate-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .detail-column {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        
+        .signature {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .signature-line {
+            width: 200px;
+            height: 1px;
+            background: #333;
+            margin: 40px auto 10px;
+        }
+        
+        .signature-name {
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .signature-title {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .watermark {
+            position: absolute;
+            opacity: 0.03;
+            font-size: 120px;
+            color: #2c5aa0;
+            transform: rotate(-45deg);
+            top: 30%;
+            left: 10%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .certificate-footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .btn-download {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-download:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 1.2s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .page-nav-item {
+                margin-bottom: 10px;
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-title {
+                order: -1;
+            }
+            
+            .certificate-border {
+                padding: 20px;
+                border-width: 10px;
+            }
+            
+            .certificate-title {
+                font-size: 1.8rem;
+            }
+            
+            .student-name {
+                font-size: 1.6rem;
+            }
+            
+            .signature-section {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .header, .welcome-section, .page-nav, .btn-download {
+                display: none;
+            }
+            
+            .certificate-container {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-flask logo-icon"></i>
+            <span>Lab Tracker</span>
+        </div>
+        <div class="header-title">Lab Safety Induction Tracker</div>
+        <div class="user-profile">
+            <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="profile">
+            <span>Sambo Kim</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4 fade-in">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>Lab Safety Training Certificates</h2>
+            <p>
+                Your certificates will appear here once you've completed all required safety training modules.
+                Complete your training to unlock and download your official certificate of completion.
+            </p>
+            
+            <!-- Progress Section -->
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Overall Progress</span>
+                    <span id="progressPercentage">70%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" style="width: 70%"></div>
+                </div>
+                <div class="mt-2 text-muted">
+                    <small id="progressText">2 out of 3 modules completed</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav">
+            <a href="#" class="page-nav-item">
+                <i class="fas fa-book-open"></i> Safety Training Modules
+            </a>
+            <a href="#" class="page-nav-item">
+                <i class="fas fa-check-circle"></i> Completed Modules
+            </a>
+            <a href="#" class="page-nav-item active">
+                <i class="fas fa-award"></i> Certificates
+            </a>
+        </div>
+
+        <!-- Locked State (shown when not all modules completed) -->
+        <div class="locked-state" id="lockedState">
+            <div class="locked-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h3>Certificate Locked</h3>
+            <p>You need to complete all safety training modules before you can access your certificate. Complete your training to unlock this feature.</p>
+            <a href="#" class="btn-continue">
+                <i class="fas fa-book-open"></i> Continue Training
+            </a>
+        </div>
+
+        <!-- Certificate (shown when all modules completed) -->
+        <div class="certificate-container" id="certificateContainer">
+            <div class="certificate-border">
+                <div class="watermark">UNIVERSITY OF MPUMALANGA</div>
+                
+                <div class="certificate-header">
+                    <!-- University Logo - Replace with actual logo path -->
+                    <img src="https://via.placeholder.com/300x80/2c5aa0/ffffff?text=UNIVERSITY+OF+MPUMALANGA" alt="University of Mpumalanga" class="university-logo">
+                    <h1 class="certificate-title">Certificate of Completion</h1>
+                    <p class="certificate-subtitle">This certificate is awarded to</p>
+                </div>
+                
+                <div class="certificate-body">
+                    <p class="award-text">for successfully completing all requirements of the</p>
+                    
+                    <h2 class="course-name">Lab Safety Induction Training Program</h2>
+                    
+                    <p class="award-text">This training ensures the recipient understands and can apply proper safety protocols when working with computer equipment and technology resources in the ICT laboratory facilities.</p>
+                    
+                    <div class="student-name" id="studentName">Sambo Kim</div>
+                    
+                    <div class="completion-date" id="completionDate">Completed on: October 2, 2025</div>
+                </div>
+                
+                <div class="certificate-details">
+                    <div class="detail-column">
+                        <div class="detail-label">SERIAL NUMBER</div>
+                        <div class="detail-value" id="serialNumber">SL-3847</div>
+                    </div>
+                    <div class="detail-column">
+                        <div class="detail-label">ISSUED ON</div>
+                        <div class="detail-value" id="issueDate">October 2, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="signature-section">
+                    <div class="signature">
+                        <div class="signature-line"></div>
+                        <div class="signature-name">Dr. Sarah Johnson</div>
+                        <div class="signature-title">Head of ICT Department</div>
+                    </div>
+                    
+                    <div class="signature">
+                        <div class="signature-line"></div>
+                        <div class="signature-name">Prof. Michael Williams</div>
+                        <div class="signature-title">Dean of Faculty</div>
+                    </div>
+                </div>
+                
+                <div class="certificate-footer">
+                    <p>This certificate verifies that the above named individual has completed the required Lab Safety Induction Training at the University of Mpumalanga.</p>
+                </div>
+            </div>
+            
+            <button class="btn-download" onclick="downloadCertificate()">Download Certificate</button>
+        </div>
+    </div>
+
+    <script>
+        // Check if user has completed all modules
+        function checkCompletionStatus() {
+            // In a real application, this would check against a database
+            // For this demo, we'll use localStorage to track completion status
+            const progress = localStorage.getItem('trainingProgress') || 70; // Default to 70% for demo
+            
+            if (progress >= 100) {
+                // User has completed all modules - show certificate
+                document.getElementById('lockedState').style.display = 'none';
+                document.getElementById('certificateContainer').style.display = 'block';
+                updateProgressDisplay(100);
+                generateCertificate();
+            } else {
+                // User hasn't completed all modules - show locked state
+                document.getElementById('lockedState').style.display = 'block';
+                document.getElementById('certificateContainer').style.display = 'none';
+                updateProgressDisplay(progress);
+            }
+        }
+        
+        // Update progress display
+        function updateProgressDisplay(progress) {
+            document.getElementById('progressPercentage').textContent = `${progress}%`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            if (progress < 100) {
+                document.getElementById('progressText').textContent = `${Math.floor(progress/100*3)} out of 3 modules completed`;
+            } else {
+                document.getElementById('progressText').textContent = 'All modules completed! Certificate unlocked.';
+            }
+        }
+        
+        // Generate certificate with user data
+        function generateCertificate() {
+            // In a real application, this would fetch user data from a database
+            const userName = localStorage.getItem('userName') || 'Sambo Kim';
+            const completionDate = localStorage.getItem('completionDate') || 'October 2, 2025';
+            const issueDate = localStorage.getItem('issueDate') || 'October 2, 2025';
+            
+            document.getElementById('studentName').textContent = userName;
+            document.getElementById('completionDate').textContent = `Completed on: ${completionDate}`;
+            document.getElementById('issueDate').textContent = issueDate;
+            
+            // Generate a random serial number if not already set
+            if (!localStorage.getItem('certificateSerial')) {
+                const serialNumber = 'SL-' + Math.floor(1000 + Math.random() * 9000);
+                localStorage.setItem('certificateSerial', serialNumber);
+            }
+            document.getElementById('serialNumber').textContent = localStorage.getItem('certificateSerial');
+        }
+        
+        // Function to download certificate as PDF
+        function downloadCertificate() {
+            window.print();
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkCompletionStatus();
+        });
+    </script>
+</body>
+</html>

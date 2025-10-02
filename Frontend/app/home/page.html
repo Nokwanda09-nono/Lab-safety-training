@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lab Safety Induction Tracker</title>
+
+  <!-- Google font similar to the screenshot -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f6f7f9;
+      --card:#ffffff;
+      --muted:#7b8794;
+      --accent:#111827;
+      --primary:#111827;
+      --btn-bg:#1f2937;
+      --btn-text:#ffffff;
+      --glass: rgba(255,255,255,0.6);
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+      color:var(--accent);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* page wrapper so things are centered horizontally */
+    .page {
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:48px 24px;
+      box-sizing:border-box;
+    }
+
+    .shell {
+      width:100%;
+      max-width:1120px;
+      background: transparent;
+      display:block;
+      position:relative;
+    }
+
+    /* Top-left small preview bar (to mimic screenshot side panel) */
+    .left-panel {
+      position:absolute;
+      left:0;
+      top:0;
+      height:100%;
+      width:120px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(250,250,250,0.6));
+      border-right:1px solid rgba(0,0,0,0.03);
+      backdrop-filter: blur(6px);
+      display:none; /* hide on small screens */
+    }
+
+    /* hero area */
+    .hero {
+      text-align:center;
+      padding:64px 32px 52px;
+      border-radius:14px;
+    }
+
+    .shield {
+      width:84px;
+      height:84px;
+      margin:0 auto 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,247,250,0.7));
+      box-shadow: 0 8px 20px rgba(18,24,40,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .title {
+      font-size:40px;
+      font-weight:700;
+      letter-spacing:-0.6px;
+      margin:6px 0 6px;
+      color:var(--accent);
+    }
+    .subtitle {
+      color:var(--muted);
+      font-size:16px;
+      margin-bottom:22px;
+      max-width:780px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .cta {
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:40px;
+    }
+
+    .btn-primary {
+      background:var(--btn-bg);
+      color:var(--btn-text);
+      border:none;
+      padding:12px 22px;
+      border-radius:8px;
+      font-weight:600;
+      box-shadow: 0 6px 18px rgba(16,24,40,0.12);
+      cursor:pointer;
+      font-size:15px;
+    }
+    .btn-link {
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-weight:600;
+      cursor:pointer;
+      font-size:15px;
+      text-decoration:none;
+      padding:8px 6px;
+    }
+
+    /* features row */
+    .features {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:22px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+
+    .feature {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,249,250,0.9));
+      border-radius:12px;
+      padding:20px;
+      box-shadow: 0 6px 18px rgba(18,24,40,0.04);
+      border:1px solid rgba(17,24,39,0.04);
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .feature .icon {
+      flex: 0 0 56px;
+      height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:10px;
+      background: rgba(0,0,0,0.02);
+    }
+
+    .feature h4{
+      margin:0 0 6px;
+      font-size:16px;
+      font-weight:700;
+      color:var(--accent);
+    }
+    .feature p{
+      margin:0;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    /* small screens */
+    @media (max-width:900px){
+      .title{ font-size:30px; }
+      .features{ grid-template-columns: 1fr; gap:14px; }
+      .shell{ padding:0 8px; }
+      .left-panel{ display:none; }
+    }
+
+    @media (min-width:1000px){
+      .left-panel{ display:block; }
+      .shell{ padding-left:120px; } /* leave space for fake left panel */
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <div class="left-panel" aria-hidden="true">
+        <!-- intentionally left minimal: imitates the vertical editor preview from the screenshot -->
+      </div>
+
+      <main class="hero" role="main" aria-labelledby="hero-title">
+        <div class="shield" aria-hidden="true">
+          <!-- simple shield + check SVG like the screenshot -->
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2l6 2v5.5c0 5.5-3.6 10.8-6 12-2.4-1.2-6-6.5-6-12V4l6-2z" fill="#111827" opacity="0.07"/>
+            <path d="M12 3.2l5 .9v4.9c0 4.3-2.7 8.5-5 9.6-2.3-1.1-5-5.3-5-9.6V4.1l5-.9z" stroke="#111827" stroke-width="1.1" stroke-linejoin="round" fill="none"/>
+            <path d="M9.5 11.5l1.6 1.6 3.4-3.4" stroke="#111827" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <h1 id="hero-title" class="title">Lab Safety Induction Tracker</h1>
+        <p class="subtitle">
+          Complete your safety training modules before accessing laboratory facilities
+        </p>
+
+        <div class="cta" role="region" aria-label="Primary actions">
+          <button class="btn-primary" type="button">Get Started</button>
+          <a class="btn-link" href="#">Sign In</a>
+        </div>
+
+        <section class="features" aria-label="Key features">
+          <article class="feature">
+            <div class="icon" aria-hidden="true">
+              <!-- simple checklist icon -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="14" height="16" rx="2" stroke="#111827" stroke-opacity="0.9" stroke-width="1.1" fill="none"/>
+                <path d="M8 9.5l1.5 1.5 3.5-3.5" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h4>Track Progress</h4>
+              <p>Monitor your completion status across all required safety modules</p>
+            </div>
+          </article>
+
+          <article class="feature">
+            <div class="icon" aria-hidden="true">
+              <!-- admin verification icon -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="8" r="2.2" stroke="#111827" stroke-width="1.1"/>
+                <path d="M4.5 19c.4-3 4-4.2 6.5-4.2s6.1 1.2 6.5 4.2" stroke="#111827" stroke-width="1.1" stroke-linecap="round"/>
+                <rect x="15.5" y="7.5" width="5" height="6" rx="1" stroke="#111827" stroke-width="1.1"/>
+                <path d="M17.2 10.5l1 1.2 2-2.6" stroke="#111827" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h4>Admin Verification</h4>
+              <p>Completions are verified by lab technicians and administrators</p>
+            </div>
+          </article>
+
+          <article class="feature">
+            <div class="icon" aria-hidden="true">
+              <!-- lock icon -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6.5" y="11.5" width="11" height="7" rx="1" stroke="#111827" stroke-width="1.1"/>
+                <path d="M8.5 11.5V9a3.5 3.5 0 017 0v2.5" stroke="#111827" stroke-width="1.1" stroke-linecap="round"/>
+                <circle cx="12" cy="15.5" r="0.8" fill="#111827"/>
+              </svg>
+            </div>
+            <div>
+              <h4>Secure Access</h4>
+              <p>Gain authorized lab access only after completing all requirements</p>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

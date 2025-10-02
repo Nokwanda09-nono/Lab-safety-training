@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Lab Safety Induction - Login</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background: #f7f8fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 8px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .tab.active {
+      color: #111;
+      border-bottom: 2px solid #111;
+    }
+
+    form {
+      display: none;
+    }
+
+    form.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    input:invalid {
+      border-color: black;
+    }
+
+    input:valid {
+      border-color: #51cf66;
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      font-size: 12px;
+      margin-top: -12px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      background: #111;
+      color: #fff;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .forgot-password a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .signup-link {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .signup-link a {
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Lab Safety Induction</h2>
+    <p>Sign in to access your training portal</p>
+
+    <div class="tabs">
+      <div class="tab active" onclick="showForm('student')">Student</div>
+      <div class="tab" onclick="showForm('admin')">Admin</div>
+    </div>
+
+    <!-- Student Login Form -->
+    <form id="student-form" class="active">
+      <label>Email</label>
+      <input type="email" id="student-email" placeholder="studentno@ump.ac.za" 
+             pattern="[a-zA-Z0-9._%+-]+@ump\.ac\.za" 
+             title="Please enter a valid UMP student email (studentno@ump.ac.za)" required>
+      <div class="error-message" id="student-email-error">Please enter a valid UMP student email address</div>
+
+      <label>Password</label>
+      <input type="password" id="student-password" required>
+
+      <button type="submit">Sign In</button>
+      
+      <div class="forgot-password">
+        <a href="#">Forgot Password?</a>
+      </div>
+    </form>
+
+    <!-- Admin Login Form -->
+    <form id="admin-form">
+      <label>Email</label>
+      <input type="email" id="admin-email" placeholder="adminname.lastname@ump.ac.za" 
+             pattern="[a-zA-Z0-9._%+-]+@ump\.ac\.za" 
+             title="Please enter a valid UMP admin email (adminname.lastname@ump.ac.za)" required>
+      <div class="error-message" id="admin-email-error">Please enter a valid UMP admin email address</div>
+
+      <label>Password</label>
+      <input type="password" id="admin-password" required>
+
+      <button type="submit">Sign In</button>
+      
+      <div class="forgot-password">
+        <a href="#">Forgot Password?</a>
+      </div>
+    </form>
+
+    <div class="signup-link">
+      Don't have an account? <a href="signup.html">Sign up here</a>
+    </div>
+  </div>
+
+  <script>
+    function showForm(type) {
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+      document.querySelectorAll("form").forEach(f => f.classList.remove("active"));
+
+      if (type === "student") {
+        document.querySelector("#student-form").classList.add("active");
+        document.querySelectorAll(".tab")[0].classList.add("active");
+      } else {
+        document.querySelector("#admin-form").classList.add("active");
+        document.querySelectorAll(".tab")[1].classList.add("active");
+      }
+    }
+
+    // Form validation and submission handling
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get the email input for the active form
+        const emailInput = this.querySelector('input[type="email"]');
+        const errorMessage = this.querySelector('.error-message');
+        
+        // Validate email format
+        if (!emailInput.checkValidity()) {
+          errorMessage.style.display = 'block';
+          emailInput.focus();
+          return;
+        } else {
+          errorMessage.style.display = 'none';
+        }
+        
+        // In a real application, you would send the login data to your backend
+        const userType = this.id === 'student-form' ? 'Student' : 'Admin';
+        alert(`${userType} login functionality would be implemented here. In a real application, this would connect to your Jakarta EE backend.`);
+      });
+    });
+
+    // Real-time validation for email inputs
+    document.querySelectorAll('input[type="email"]').forEach(input => {
+      input.addEventListener('input', function() {
+        const errorMessage = this.parentElement.querySelector('.error-message');
+        if (this.validity.valid) {
+          errorMessage.style.display = 'none';
+        } else {
+          errorMessage.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
