@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Computer & OS Basic Knowledge — Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .option-button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .correct { background-color: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); }
+    .incorrect { background-color: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.4); }
+    .timer { font-weight: 600; color: #1e3a8a; }
+    .timer.warning { color: #dc2626; animation: blink 1s step-start infinite; }
+    @keyframes blink { 50% { opacity: 0.5; } }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-6">
+  <main class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6 md:p-10">
+    <header class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-semibold">Computer & OS Basic Knowledge — Quiz</h1>
+        <p class="text-sm text-slate-500 mt-1">15 multiple-choice questions — Average pass: 70% | Duration: 30 minutes</p>
+      </div>
+      <!-- 🕒 Timer Display -->
+      <div id="timer" class="timer text-lg"></div>
+    </header>
+
+    <section id="quiz-container" aria-live="polite">
+      <div class="flex items-center justify-between mb-4 gap-4">
+        <div class="flex items-center gap-3">
+          <div id="progress" class="text-sm text-slate-600">Question <span id="qIndex">1</span> of <span id="qTotal">15</span></div>
+          <div class="w-48 bg-slate-200 h-2 rounded overflow-hidden">
+            <div id="progressBar" class="h-2 rounded bg-indigo-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <article id="questionCard" class="bg-white border rounded-lg p-5 shadow-sm">
+        <h2 id="questionText" class="text-lg font-medium mb-3">Loading question...</h2>
+        <div id="options" class="grid gap-3"></div>
+        <div id="feedback" class="mt-4 text-sm" hidden></div>
+      </article>
+
+      <div id="summary" class="mt-6 hidden">
+        <div class="p-5 bg-slate-50 border rounded-lg">
+          <h3 class="text-xl font-semibold mb-2">Your results</h3>
+          <p class="text-sm text-slate-600 mb-4">Score: <strong id="scoreText">0 / 15</strong></p>
+          <div id="detailedResults" class="space-y-3 max-h-64 overflow-auto pr-2"></div>
+          <div class="mt-4 flex gap-3">
+            <button id="retryBtn" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Retry Quiz</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-6 text-xs text-slate-500">
+      Tips: Use <kbd class="rounded px-1 bg-slate-100 border">Tab</kbd> to navigate and <kbd class="rounded px-1 bg-slate-100 border">Enter</kbd> to select.
+    </footer>
+  </main>
+
+  <script>
+    // Example questions (use your existing quiz data)
+    const QUESTIONS = [
+      { q: "Which of the following is NOT an operating system?", options: ["Windows", "Linux", "Microsoft Word", "macOS"], answer: 2 },
+      { q: "What is the safest way to uninstall software?", options: ["Delete the program folder", "Use the OS uninstall feature", "Remove shortcuts", "Restart computer"], answer: 1 },
+      // ... (add the rest of your 15 questions)
+    ];
+
+    // Quiz setup
+    const totalQuestions = QUESTIONS.length;
+    const qIndex = document.getElementById("qIndex");
+    const qTotal = document.getElementById("qTotal");
+    const qText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("options");
+    const progressBar = document.getElementById("progressBar");
+    const summary = document.getElementById("summary");
+    const scoreText = document.getElementById("scoreText");
+
+    let current = 0;
+    let score = 0;
+    qTotal.textContent = totalQuestions;
+
+    function showQuestion(index) {
+      const q = QUESTIONS[index];
+      qIndex.textContent = index + 1;
+      qText.textContent = q.q;
+      optionsContainer.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "option-button w-full border rounded-lg p-3 text-left hover:bg-indigo-50";
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(i, q.answer, btn);
+        optionsContainer.appendChild(btn);
+      });
+      progressBar.style.width = ((index + 1) / totalQuestions) * 100 + "%";
+    }
+
+    function checkAnswer(selected, correct, button) {
+      const buttons = document.querySelectorAll(".option-button");
+      buttons.forEach(b => b.disabled = true);
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("incorrect");
+      }
+      setTimeout(() => nextQuestion(), 1000);
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < totalQuestions) {
+        showQuestion(current);
+      } else {
+        endQuiz();
+      }
+    }
+
+    function endQuiz() {
+      document.getElementById("questionCard").classList.add("hidden");
+      summary.classList.remove("hidden");
+      scoreText.textContent = `${score} / ${totalQuestions}`;
+      clearInterval(timerInterval);
+    }
+
+    document.getElementById("retryBtn").addEventListener("click", () => location.reload());
+
+    // Initialize quiz
+    showQuestion(current);
+
+    // 🕒 Countdown Timer Logic
+    const timerElement = document.getElementById("timer");
+    let timeLeft = 30 * 60; // 30 minutes in seconds
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      if (timeLeft <= 60) timerElement.classList.add("warning"); // last minute warning
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        alert("⏰ Time's up! Submitting your quiz.");
+        endQuiz();
+      }
+      timeLeft--;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>

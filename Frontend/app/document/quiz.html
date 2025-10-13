@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Document Structure Elements — Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .option-button[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .correct { background-color: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); }
+    .incorrect { background-color: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.4); }
+    .timer.warning { color: #dc2626; animation: blink 1s step-start infinite; }
+    @keyframes blink { 50% { opacity: 0.5; } }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-6">
+  <main class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6 md:p-10">
+    <header class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-semibold">Document Structure Elements — Quiz</h1>
+        <p class="text-sm text-slate-500 mt-1">10 multiple-choice questions — Average pass: 70% | Duration: 20 minutes</p>
+      </div>
+      <!-- 🕒 Timer -->
+      <div id="timer" class="timer text-lg font-semibold text-indigo-700"></div>
+    </header>
+
+    <section id="quiz-container" aria-live="polite">
+      <div class="flex items-center justify-between mb-4 gap-4">
+        <div class="flex items-center gap-3">
+          <div id="progress" class="text-sm text-slate-600">Question <span id="qIndex">1</span> of <span id="qTotal">10</span></div>
+          <div class="w-48 bg-slate-200 h-2 rounded overflow-hidden">
+            <div id="progressBar" class="h-2 rounded bg-indigo-500" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="prevBtn" class="px-3 py-1 rounded bg-slate-100 hover:bg-slate-200 disabled:opacity-50" disabled>Prev</button>
+          <button id="nextBtn" class="px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700">Next</button>
+        </div>
+      </div>
+
+      <article id="questionCard" class="bg-white border rounded-lg p-5 shadow-sm">
+        <h2 id="questionText" class="text-lg font-medium mb-3">Loading question...</h2>
+        <div id="options" class="grid gap-3"></div>
+        <div id="feedback" class="mt-4 text-sm" hidden></div>
+      </article>
+
+      <div id="summary" class="mt-6 hidden">
+        <div class="p-5 bg-slate-50 border rounded-lg">
+          <h3 class="text-xl font-semibold mb-2">Your results</h3>
+          <p class="text-sm text-slate-600 mb-4">Score: <strong id="scoreText">0 / 10</strong> — <span id="passFail"></span></p>
+          <div id="detailedResults" class="space-y-3 max-h-64 overflow-auto pr-2"></div>
+
+          <div class="mt-4 flex gap-3">
+            <button id="retryBtn" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Retry Quiz</button>
+            <button id="reviewBtn" class="px-4 py-2 border rounded bg-white hover:bg-slate-50">Review Answers</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-6 text-xs text-slate-500">
+      Tip: Use <kbd class="rounded px-1 bg-slate-100 border">Tab</kbd> to navigate and <kbd class="rounded px-1 bg-slate-100 border">Enter</kbd> to select.
+    </footer>
+  </main>
+
+  <script>
+    // 🧩 Document Structure Elements Quiz (10 questions)
+    const QUESTIONS = [
+      { q: "What is the purpose of the <!DOCTYPE html> declaration?", options: ["To define the HTML version being used","To display the website title","To load external JavaScript files","To create a table structure"], answer: 0, explanation: "The <!DOCTYPE html> declaration defines that the document is HTML5, helping browsers render it correctly."},
+      { q: "Which element is the root element of an HTML document?", options: ["<html>","<head>","<body>","<main>"], answer: 0, explanation: "The <html> tag wraps all other elements and represents the root of the document."},
+      { q: "Which section of an HTML document contains metadata, links, and the title?", options: ["<footer>","<head>","<section>","<body>"], answer: 1, explanation: "The <head> element holds metadata, page title, styles, and external resources."},
+      { q: "Where is visible webpage content placed in an HTML document?", options: ["Inside the <body> element","Inside the <head> element","Inside the <meta> tag","Inside the <title> tag"], answer: 0, explanation: "All visible content such as text, images, and links appear within the <body> tag."},
+      { q: "What is the role of the <title> element?", options: ["Displays text inside the browser tab","Defines the main heading on the page","Creates a section header","Adds a navigation link"], answer: 0, explanation: "The <title> tag defines the text shown in the browser tab and search engine results."},
+      { q: "Which element represents the main content area unique to a page?", options: ["<main>","<section>","<article>","<div>"], answer: 0, explanation: "The <main> element contains the dominant content unique to that document."},
+      { q: "Which element defines a self-contained block of related content, such as a news article?", options: ["<section>","<article>","<aside>","<header>"], answer: 1, explanation: "The <article> tag represents independent, self-contained content that can stand on its own."},
+      { q: "Which tag is used to group related content together, often with a heading?", options: ["<section>","<footer>","<span>","<meta>"], answer: 0, explanation: "The <section> element groups related thematic content, often with its own heading."},
+      { q: "Which tag defines introductory content, such as a logo or navigation links, typically at the top?", options: ["<header>","<footer>","<aside>","<nav>"], answer: 0, explanation: "The <header> element usually contains introductory information like a title or navigation."},
+      { q: "Which element defines content that appears at the bottom of a document or section?", options: ["<footer>","<bottom>","<end>","<aside>"], answer: 0, explanation: "The <footer> tag defines closing content such as author info, copyright, or related links."}
+    ];
+
+    // Quiz state
+    let currentIndex = 0;
+    const total = QUESTIONS.length;
+    const userAnswers = new Array(total).fill(null);
+
+    const qIndexEl = document.getElementById('qIndex');
+    const qTotalEl = document.getElementById('qTotal');
+    const questionText = document.getElementById('questionText');
+    const optionsDiv = document.getElementById('options');
+    const feedbackDiv = document.getElementById('feedback');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const summaryEl = document.getElementById('summary');
+    const scoreText = document.getElementById('scoreText');
+    const detailedResults = document.getElementById('detailedResults');
+    const retryBtn = document.getElementById('retryBtn');
+    const reviewBtn = document.getElementById('reviewBtn');
+    const passFailEl = document.getElementById('passFail');
+
+    qTotalEl.textContent = total;
+
+    function renderQuestion(idx) {
+      const data = QUESTIONS[idx];
+      qIndexEl.textContent = idx + 1;
+      questionText.textContent = data.q;
+      optionsDiv.innerHTML = '';
+      feedbackDiv.hidden = true;
+
+      data.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-button text-left w-full p-3 border rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-200';
+        btn.textContent = opt;
+        btn.onclick = () => handleAnswer(idx, i);
+        optionsDiv.appendChild(btn);
+      });
+
+      prevBtn.disabled = idx === 0;
+      nextBtn.textContent = (idx === total - 1) ? 'Finish' : 'Next';
+      progressBar.style.width = `${(idx / total) * 100}%`;
+    }
+
+    function handleAnswer(qIdx, chosenIdx) {
+      const question = QUESTIONS[qIdx];
+      userAnswers[qIdx] = chosenIdx;
+      const isCorrect = chosenIdx === question.answer;
+
+      const buttons = optionsDiv.querySelectorAll('.option-button');
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === question.answer) btn.classList.add('correct');
+        if (i === chosenIdx && i !== question.answer) btn.classList.add('incorrect');
+      });
+
+      feedbackDiv.hidden = false;
+      feedbackDiv.innerHTML = `
+        <div class="${isCorrect ? 'text-green-700' : 'text-red-700'} font-medium mb-1">
+          ${isCorrect ? 'Correct ✔' : 'Incorrect ✖'}
+        </div>
+        <div class="text-sm text-slate-600">${question.explanation}</div>
+      `;
+    }
+
+    nextBtn.onclick = () => {
+      if (currentIndex < total - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+      } else {
+        showSummary();
+        progressBar.style.width = '100%';
+        clearInterval(timerInterval); // stop timer
+      }
+    };
+
+    prevBtn.onclick = () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion(currentIndex);
+      }
+    };
+
+    function showSummary() {
+      let score = 0;
+      QUESTIONS.forEach((q, i) => {
+        if (userAnswers[i] === q.answer) score++;
+      });
+
+      scoreText.textContent = `${score} / ${total}`;
+      const passed = score / total >= 0.7;
+      passFailEl.textContent = passed ? "Passed ✅" : "Failed ❌";
+      passFailEl.className = passed ? "text-green-600 font-semibold" : "text-red-600 font-semibold";
+
+      detailedResults.innerHTML = '';
+      QUESTIONS.forEach((q, i) => {
+        const container = document.createElement('div');
+        container.className = 'p-3 border rounded-lg bg-white';
+        const correct = userAnswers[i] === q.answer;
+        container.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="text-sm font-medium">${i + 1}. ${q.q}</div>
+              <div class="text-sm text-slate-600 mt-1">Your answer: <strong>${userAnswers[i] !== null ? q.options[userAnswers[i]] : '<em>Not answered</em>'}</strong></div>
+              <div class="text-sm text-slate-600">Correct answer: <strong>${q.options[q.answer]}</strong></div>
+              <div class="text-sm text-slate-600 mt-2">${q.explanation}</div>
+            </div>
+            <div class="text-sm ${correct ? 'text-green-600' : 'text-red-600'} font-semibold self-center">${correct ? '✔' : '✖'}</div>
+          </div>
+        `;
+        detailedResults.appendChild(container);
+      });
+
+      summaryEl.classList.remove('hidden');
+    }
+
+    retryBtn.onclick = () => {
+      userAnswers.fill(null);
+      currentIndex = 0;
+      summaryEl.classList.add('hidden');
+      renderQuestion(currentIndex);
+      progressBar.style.width = '0%';
+      timeLeft = 20 * 60; // reset timer
+      timerEl.classList.remove("warning");
+      updateTimer();
+    };
+
+    reviewBtn.onclick = () => {
+      summaryEl.classList.add('hidden');
+      currentIndex = 0;
+      renderQuestion(currentIndex);
+    };
+
+    renderQuestion(currentIndex);
+
+    // 🕒 Countdown Timer (20 minutes)
+    const timerEl = document.getElementById("timer");
+    let timeLeft = 20 * 60; // seconds
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerEl.textContent = `${minutes}:${seconds.toString().padStart(2,'0')}`;
+
+      if(timeLeft <= 60) timerEl.classList.add("warning"); // last minute
+      if(timeLeft <= 0) {
+        clearInterval(timerInterval);
+        alert("⏰ Time's up! Your quiz will be submitted automatically.");
+        showSummary();
+      }
+      timeLeft--;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>
